@@ -1,0 +1,16 @@
+name:			jugs
+version:		0.1
+license:		OtherLicense
+license-file:		LICENSE
+author:			Edward Kmett
+maintainer:		ekmett@gmail.com
+stability:		alpha
+homepage:		http://slipwave.info/
+synopsis:		ECMAScript 4 Language Tools for Haskell
+copyright:		Copyright (C) 2006 Edward Kmett. All Rights Reserved
+description: 		Exposes a ECMAScript 4 implementation to Haskell.
+build-depends:		plugins>=1.0
+extensions:		MultiParamTypeClasses, FunctionalDependencies, Arrows, TemplateHaskell
+exposed-modules:	Type.Binary, Type.Boolean, Type.Ord
+ghc-options:		-Wall -O -funbox-strict-fields
+hs-source-dirs:		src
