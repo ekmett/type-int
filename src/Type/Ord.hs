@@ -16,13 +16,13 @@
 -- Instances should all really be decidable.
 ----------------------------------------------------------------------------
 
-module Type.Ord 
+module Type.Ord
 	( TEq, tEq
 	, TLt, tLt
 	, TGe, tGe -- closed, extend via TEq/TLt
 	, TLe, tLe -- closed, extend via TEq/TLt
 	, TGt, tGt -- closed, extend via TEq/TLt
-) where 
+) where
 
 import Type.Boolean
 
@@ -32,11 +32,11 @@ instance Closed Closure
 
 -- two open classes
 class TBool b => TEq x y b | x y -> b
-instance TEq T T T 
+instance TEq T T T
 instance TEq T F F
 instance TEq F T F
 instance TEq F F T
-tEq :: TEq x y b => x -> y -> b; 
+tEq :: TEq x y b => x -> y -> b;
 tEq = undefined
 
 class TBool b => TLt x y b | x y -> b

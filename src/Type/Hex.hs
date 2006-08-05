@@ -11,7 +11,7 @@
 -- Stability   :  experimental
 -- Portability :  non-portable (MPTC, FD, TH, undecidable instances, missing constructors)
 --
--- Type-level hexadecimal numbers, positive and negative with infinite 
+-- Type-level hexadecimal numbers, positive and negative with infinite
 -- precision. Should work out to about 2^72 without changing the default
 -- context length limit in GHC.
 --
@@ -22,7 +22,7 @@ module Type.Hex (
 	THex, fromTHex,		   	   -- Infinite precision binary
 	TIsZero, TIsPositive, TIsNegative, -- Trichotomy
 	tIsZero, tIsPositive, tIsNegative,
-	LSN, tLSN, 
+	LSN, tLSN,
 	TNeg, tNeg,
 	TSucc, tSucc, tPred,
 	TAdd, tAdd, tSub,

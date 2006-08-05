@@ -9,26 +9,26 @@
 --
 -- Maintainer  :  Edward Kmett <ekmett@gmail.com>
 -- Stability   :  experimental
--- Portability :  non-portable (MPTC, FD, TH, undecidable instances, and no constructors)
+-- Portability :  non-portable (MPTC, FD, TH, undecidable instances, and missing constructors)
 --
--- Simple type-level binary numbers, positive and negative with infinite 
+-- Simple type-level binary numbers, positive and negative with infinite
 -- precision. This forms a nice commutative ring with multiplicative identity
 -- like we would expect from a representation for Z.
 --
--- The numbers are represented as a Boolean Ring over a countable set of 
+-- The numbers are represented as a Boolean Ring over a countable set of
 -- variables, in which for every element in the set there exists an n in N
 -- and a b in {T,F} such that for all n'>=n in N, x_i = b.
--- 
+--
 -- For uniqueness we always choose the least such n when representing numbers
 -- this allows us to run most computations backwards. When we can't, and such
--- a fundep would be implied, we obtain it by combining semi-operations that 
+-- a fundep would be implied, we obtain it by combining semi-operations that
 -- together yield the appropriate class fundep list.
 --
 -- The goal here was to pull together many of the good ideas I've seen from
--- various sources, and sprinkle a two's complement negative number 
+-- various sources, and sprinkle a two's complement negative number
 -- representation on top.
 --
--- Reuses T and F from the Type.Boolean as the infinite tail of the 2s 
+-- Reuses T and F from the Type.Boolean as the infinite tail of the 2s
 -- complement binary number. I'm particularly fond of the symmetry exhibited
 -- in the full adder.
 --
@@ -36,11 +36,11 @@
 ----------------------------------------------------------------------------
 
 module Type.Binary (
-	O, I, 				   -- zero or one digit
-	TBinary, fromTBinary,		   -- Infinite precision binary
-	TIsZero, TIsPositive, TIsNegative, -- Trichotomy
+	O, I,
+	TBinary, fromTBinary,
+	TIsZero, TIsPositive, TIsNegative,
 	tIsZero, tIsPositive, tIsNegative,
-	LSB, tLSB, 
+	LSB, tLSB,
 	TNeg, tNeg,
 	TSucc, tSucc, tPred,
 	TAdd, tAdd, tSub,
@@ -48,6 +48,7 @@ module Type.Binary (
 	TPow, tPow,
 	TShift, tShift,
 	TNF, tNF,
+	TAbs, tAbs,
 	TGetBit, tGetBit,
 	TSetBit, tSetBit,
 	TUnSetBit, tUnSetBit,
@@ -55,7 +56,8 @@ module Type.Binary (
 	TComplementBit, tComplementBit,
 	TCountBits, tCountBits,
 	-- re-exported from Type.Boolean
-	T, F,
+	T, tT,
+	F, tF,
 	TNot, tNot,
 	TAnd, tAnd,
 	TOr, tOr,
@@ -70,12 +72,9 @@ module Type.Binary (
 	-- re-exported from Type.Binary.TH
 	binaryE,
 	binaryT
-	-- re-exported from Type.Binary.Names
 ) where
 
-import Type.Binary.Internals
-import Type.Binary.TH
-import Type.Binary.Names
 import Type.Boolean
 import Type.Ord
-import Language.Haskell.TH
+import Type.Binary.Internals
+import Type.Binary.TH

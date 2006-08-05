@@ -20,8 +20,6 @@ exposed-modules:
 	Type.Binary, 
 	Type.Binary.Internals, 
 	Type.Binary.TH,
-	Type.Binary.Hex,
-	Type.Binary.Names,
 	Type.Hex,
 	Type.Hex.Stage1,
 	Type.Hex.Stage2,

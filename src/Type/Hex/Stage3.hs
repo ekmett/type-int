@@ -1,5 +1,19 @@
 {-# GHC_OPTIONS -fglasgow-exts #-}
 {-# GHC_OPTIONS -fth #-}
+-----------------------------------------------------------------------------
+-- |
+-- Module      :  Type.Hex.Stage2
+-- Copyright   :  (C) 2006 Edward Kmett
+-- License     :  BSD-style (see the file libraries/base/LICENSE)
+--
+-- Maintainer  :  Edward Kmett <ekmett@gmail.com>
+-- Stability   :  experimental
+-- Portability :  non-portable (MPTC, FD, TH, undecidable instances, missing constructors)
+--
+-- Stage3: Define everything else. The juicier bits are then exposed via
+-- Type.Hex
+-----------------------------------------------------------------------------
+
 module Type.Hex.Stage3 where
 
 import Type.Boolean
@@ -29,7 +43,6 @@ class TNeg a b | a -> b, b -> a
 instance (TNot a b, TSucc b c) => TNeg a c
 tNeg :: TNeg a b => a -> b; tNeg = undefined
 
---class Trichotomy n s | n -> s
 instance Trichotomy T Negative
 instance Trichotomy F SignZero
 #ifndef __HADDOCK__
@@ -59,7 +72,6 @@ class TIsZero n b | n -> b
 instance (Trichotomy n s, TEq s SignZero b) => TIsZero n b
 tIsZero :: TIsZero n b => n -> b; tIsZero = undefined
 
--- output several hundred instances for a full hex adder
 instance TAddC' F F F F
 instance TAddC' T F T F
 instance TAddC' F T F T
@@ -104,7 +116,6 @@ class TSub' a b c | a b -> c
 instance (TNeg b b', TAdd' a b' c) => TSub' a b c
 tSub' :: TSub' a b c => a -> b -> c; tSub' = undefined
 
--- reversible addition and subtraction
 class TAdd a b c | a b -> c, a c -> b, b c -> a
 instance (TAdd' a b c, TNeg b b', TAdd' c b' a, TNeg a a', TAdd' c a' b) => TAdd a b c
 tAdd :: (TAdd a b c) => a -> b -> c;tAdd = undefined
@@ -138,7 +149,6 @@ instance THex (DD a) => Show (DD a) where show n = "$(hexE "++ (show $ fromTHex 
 instance THex (DE a) => Show (DE a) where show n = "$(hexE "++ (show $ fromTHex n)++")"
 instance THex (DF a) => Show (DF a) where show n = "$(hexE "++ (show $ fromTHex n)++")"
 
-
 instance SHR1 H0 F F
 instance SHR1 H1 F (D1 F)
 instance SHR1 H0 T (DE T)
@@ -163,7 +173,7 @@ $(
         return $ InstanceD [pre] post [])
 #endif
 
--- | A simple peasant multiplier
+-- | A simple peasant multiplier. TODO: exploit 2s complement and reverse the worst cases
 class TMul a b c | a b -> c
 instance TMul a F F 
 instance TNeg a b => TMul a T b
@@ -253,7 +263,6 @@ instance ( TMul (D0 a1) b c
 tMul :: TMul a b c => a -> b -> c
 tMul = undefined
 
--- doesn't normalize
 class THex2Binary' a b | a -> b, b -> a
 instance THex2Binary' F F 
 instance THex2Binary' T T
@@ -282,19 +291,17 @@ class TBinary2Hex a b | a -> b
 instance (THex2Binary' a b, TNF a a') => TBinary2Hex b a'
 tBinary2Hex :: TBinary2Hex a b => a -> b; tBinary2Hex = undefined
 
--- reversible version.
 class THexBinary a b | a -> b, b -> a
 instance (THex2Binary a b, TBinary2Hex b a) => THexBinary a b
 
--- | peasant exponentiator with Binary exponent
+-- | peasant exponentiator with explicit binary exponent
 class TPow' a b c | a b -> c
 instance TPow' a F (D1 F)
 instance (TPow' a k c, TMul c c d) => TPow' a (B.O k) d
 instance (TPow' a k c, TMul c c d, TMul a d e) => TPow' a (B.I k) e
 
+-- | peasant exponentiator
 class TPow a b c | a b -> c
 instance (THex2Binary b b', TPow' a b' c) => TPow a b c
 tPow :: TPow a b c => a -> b -> c
 tPow = undefined
-
--- TODO: And, Or, XOr, Implies

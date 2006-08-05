@@ -9,12 +9,12 @@
 -- Stability   :  experimental
 -- Portability :  non-portable (FD and MPTC. no constructor data types)
 --
--- Simple closed type-level booleans. 
+-- Simple closed type-level booleans.
 ----------------------------------------------------------------------------
 
 module Type.Boolean (
-    TBool, 
-    F, T, 
+    TBool,
+    F, T,
     tT, tF,
     TAnd, TOr, TNot, TXOr, TXOr', TImplies, TIf,
     tAnd, tOr, tNot, tXOr, tXOr', tImplies, tIf,
@@ -39,8 +39,8 @@ instance TBool T where fromTBool _ = True
 instance TBool F where fromTBool _ = False
 
 -- | Let them be shown
-instance Show T where show _ = "T"
-instance Show F where show _ = "F"
+instance Show T where show _ = "tT"
+instance Show F where show _ = "tF"
 
 -- | Type-Level a `and` b = c
 class TAnd a b c | a b -> c
@@ -49,7 +49,7 @@ instance TAnd T F F
 instance TAnd F T F
 instance TAnd T T T
 tAnd :: TAnd a b c => a -> b -> c
-tAnd = undefined 
+tAnd = undefined
 
 -- | Type-Level a `or` b = c
 class TOr a b c | a b -> c
@@ -73,7 +73,7 @@ tXOr' = undefined
 -- | implemented this way rather than directly so that Binary can extend it properly.
 -- otherwise the normal form restriction makes that nigh impossible.
 class (TXOr' a b c, TXOr' b c a, TXOr' c a b) => TXOr a b c | a b -> c, a c -> b, b c -> a
-instance (TXOr' a b c, TXOr' b c a, TXOr' c a b) => TXOr a b c 
+instance (TXOr' a b c, TXOr' b c a, TXOr' c a b) => TXOr a b c
 tXOr :: TXOr a b c => a -> b -> c
 tXOr = undefined
 
@@ -86,7 +86,7 @@ instance TImplies T T T
 tImplies :: TImplies a b c => a -> b -> c
 tImplies = undefined
 
--- | Type-Level: not a 
+-- | Type-Level: not a
 class TNot a b | a -> b, b -> a
 instance TNot T F
 instance TNot F T
