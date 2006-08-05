@@ -3,7 +3,7 @@
 -- |
 -- Module      :  Type.Boolean
 -- Copyright   :  (C) 2006 Edward Kmett
--- License     :  BSD-style (see the file libraries/base/LICENSE)
+-- License     :  BSD-style (see the file LICENSE)
 --
 -- Maintainer  :  Edward Kmett <ekmett@gmail.com>
 -- Stability   :  experimental
@@ -16,8 +16,8 @@ module Type.Boolean (
     TBool, 
     F, T, 
     tT, tF,
-    TAnd, TOr, TNot, TXOr, TImplies, TIf,
-    tAnd, tOr, tNot, tXOr, tImplies, tIf
+    TAnd, TOr, TNot, TXOr, TXOr', TImplies, TIf,
+    tAnd, tOr, tNot, tXOr, tXOr', tImplies, tIf,
 ) where
 
 data Closure
@@ -61,11 +61,19 @@ tOr :: TOr a b c => a -> b -> c
 tOr = undefined
 
 -- | Type-Level: a `xor` b = c
-class TXOr a b c | a b -> c, a c -> b, b c -> a
-instance TXOr F F F
-instance TXOr F T T
-instance TXOr T F T
-instance TXOr T T F
+class TXOr' a b c | a b -> c
+instance TXOr' F F F
+instance TXOr' F T T
+instance TXOr' T F T
+instance TXOr' T T F
+tXOr' :: TXOr' a b c => a -> b -> c
+tXOr' = undefined
+
+
+-- | implemented this way rather than directly so that Binary can extend it properly.
+-- otherwise the normal form restriction makes that nigh impossible.
+class (TXOr' a b c, TXOr' b c a, TXOr' c a b) => TXOr a b c | a b -> c, a c -> b, b c -> a
+instance (TXOr' a b c, TXOr' b c a, TXOr' c a b) => TXOr a b c 
 tXOr :: TXOr a b c => a -> b -> c
 tXOr = undefined
 

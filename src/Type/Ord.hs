@@ -4,7 +4,7 @@
 -- |
 -- Module      :  Type.Ord
 -- Copyright   :  (C) 2006 Edward Kmett
--- License     :  BSD-style (see the file libraries/base/LICENSE)
+-- License     :  BSD-style (see the file LICENSE)
 --
 -- Maintainer  :  Edward Kmett <ekmett@gmail.com>
 -- Stability   :  experimental
