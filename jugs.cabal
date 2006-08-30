@@ -24,6 +24,5 @@ exposed-modules:
 	Type.Hex.Stage1,
 	Type.Hex.Stage2,
 	Type.Hex.Stage3,
-	Type.Maybe
 ghc-options:		-Wall -O -funbox-strict-fields
 hs-source-dirs:		src
