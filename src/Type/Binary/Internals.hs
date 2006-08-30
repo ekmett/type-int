@@ -55,7 +55,7 @@ module Type.Binary.Internals (
 	TUnSetBit, tUnSetBit,
 	TComplementBit, tComplementBit,
 	TCountBits, tCountBits,	
-	TTReverse, tReverse,
+	{- TReverse, tReverse, -}
 	TAbs, tAbs,
 	TNF, tNF,		-- put a number into normal form
 	t2n, t2np1,		-- prepend a 0 or 1
@@ -142,8 +142,8 @@ instance (TBinary a, XO a) => TBinary (O a) 	where fromTBinary _ = let x = fromT
 instance (TBinary a, XI a) => TBinary (I a) 	where fromTBinary _ = let x = fromTBinary (undefined::a) in succ(x+x)
 
 -- | Show should express a value as legal haskell.
-instance TBinary (O a) => Show (O a) where show n = "$(binaryE "++(show $fromTBinary n)++")"
-instance TBinary (I a) => Show (I a) where show n = "$(binaryE "++(show $fromTBinary n)++")"
+instance TBinary (O a) => Show (O a) where show n = "$(binaryE "++(show $ fromTBinary n)++")"
+instance TBinary (I a) => Show (I a) where show n = "$(binaryE "++(show $ fromTBinary n)++")"
 
 {-
 instance Show (O F) where show n = "({-error-} O F)";
@@ -301,6 +301,7 @@ instance TPow a F (I F)
 instance (TPow a k c, TMul c c d) => TPow a (O k) d
 instance (TPow a k c, TMul c c d, TMul a d e) => TPow a (I k) e
 tPow :: TPow a b c => a -> b -> c; tPow = undefined
+{-
 
 -- | Reverse the finite head of the number. non-normalizing, needs seed sign
 class TReverse'' a b c | a b -> b
@@ -311,13 +312,15 @@ instance TReverse'' a (I b) c => TReverse (I a) b c
 
 -- | Reverse the finite head of a number yielding a normal form answer
 class TReverse' a b | a -> b
-instance (IsNegative a b, TReverse' a b c, TNF c c') => TReverse' a c'
+instance (TIsNegative a b, TReverse' a b c, TNF c c') => TReverse' a c'
 
 -- | Reverse the finite head of a number, invertably
 class TReverse a b | a -> b, b -> a
 instance (TReverse' a b, TReverse' b a) => TReverse a b
 tReverse :: TReverse a b => a -> b; tReverse = undefined
 
+
+-}
 -- | Return the absolute value of a
 class TAbs a b | a -> b
 instance (TIsNegative a s, TNeg a a', TIf s a' a a'') => TAbs a a''
