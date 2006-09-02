@@ -1,20 +1,16 @@
-name:			jugs
-version:		0.1
-license:		OtherLicense
+name:			type-int
+version:		0.2
+license:		BSD3
 license-file:		LICENSE
 author:			Edward Kmett
 maintainer:		ekmett@gmail.com
 stability:		alpha
 homepage:		http://slipwave.info/
-synopsis:		ECMAScript 4 Language Tools for Haskell
+synopsis:		Type Level 2s- and 16s- Complement Integers
 copyright:		Copyright (C) 2006 Edward Kmett. All Rights Reserved
-description: 		Exposes a ECMAScript 4 implementation to Haskell.
-build-depends:		plugins>=1.0
-extensions:		MultiParamTypeClasses, FunctionalDependencies, Arrows, TemplateHaskell, CPP
-exposed-modules:	
-	Data.Hashable,
-	Data.THash,
-	Data.THash.THT,
+description: 		Type Level 2s- and 16s- Complement Integers 
+extensions:		MultiParamTypeClasses, FunctionalDependencies, TemplateHaskell, CPP
+exposed-modules:
 	Type.Boolean, 
 	Type.Ord, 
 	Type.Binary, 
@@ -23,6 +19,6 @@ exposed-modules:
 	Type.Hex,
 	Type.Hex.Stage1,
 	Type.Hex.Stage2,
-	Type.Hex.Stage3,
+	Type.Hex.Stage3
 ghc-options:		-Wall -O -funbox-strict-fields
 hs-source-dirs:		src
