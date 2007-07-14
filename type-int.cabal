@@ -8,9 +8,9 @@ author:			Edward Kmett
 maintainer:		ekmett@gmail.com
 stability:		alpha
 homepage:		http://slipwave.info/
-synopsis:		Type Level 2s- and 16s- Complement Integers (Positive and Negative), Booleans, Ord and Eq
+synopsis:		Type Level 2s- and 16s- Complement Integers
 copyright:		Copyright (C) 2006 Edward Kmett. All Rights Reserved
-description: 		Type Level 2s- and 16s- Complement Integers (Positive and Negative), Booleans, Ord and Eq
+description: 		Type level 2s- and 16s- complement integers (positive and negative), booleans, ord and eq
 extensions:		MultiParamTypeClasses, FunctionalDependencies, TemplateHaskell, UndecidableInstances, CPP
 exposed-modules:
 	Type.Boolean, 
