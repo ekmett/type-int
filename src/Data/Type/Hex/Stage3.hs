@@ -2,7 +2,7 @@
 {-# GHC_OPTIONS -fth #-}
 -----------------------------------------------------------------------------
 -- |
--- Module      :  Type.Hex.Stage2
+-- Module      :  Data.Type.Hex.Stage3
 -- Copyright   :  (C) 2006 Edward Kmett
 -- License     :  BSD-style (see the file libraries/base/LICENSE)
 --
@@ -10,21 +10,20 @@
 -- Stability   :  experimental
 -- Portability :  non-portable (MPTC, FD, TH, undecidable instances, missing constructors)
 --
--- Stage3: Define everything else. The juicier bits are then exposed via
--- Type.Hex
+-- Stage3: Define everything else. The juicier bits are then exposed via "Data.Type.Hex"
 -----------------------------------------------------------------------------
 
-module Type.Hex.Stage3 where
+module Data.Type.Hex.Stage3 where
 
-import Type.Boolean
+import Data.Type.Boolean
 import Control.Monad
-import Type.Hex.Stage1
-import Type.Hex.Stage2
-import Type.Sign
-import Type.Ord
+import Data.Type.Hex.Stage1
+import Data.Type.Hex.Stage2
+import Data.Type.Sign
+import Data.Type.Ord
 import Data.Bits
 import Language.Haskell.TH
-import qualified Type.Binary as B
+import qualified Data.Type.Binary as B
 
 instance TSucc T F
 instance TSucc F (D1 F)

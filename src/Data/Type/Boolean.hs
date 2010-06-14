@@ -1,7 +1,7 @@
 {-# OPTIONS -fglasgow-exts #-}
 -----------------------------------------------------------------------------
 -- |
--- Module      :  Type.Boolean
+-- Module      :  Data.Type.Boolean
 -- Copyright   :  (C) 2006 Edward Kmett
 -- License     :  BSD-style (see the file LICENSE)
 --
@@ -12,7 +12,7 @@
 -- Simple closed type-level booleans.
 ----------------------------------------------------------------------------
 
-module Type.Boolean (
+module Data.Type.Boolean (
     TBool,
     F, T,
     tT, tF,

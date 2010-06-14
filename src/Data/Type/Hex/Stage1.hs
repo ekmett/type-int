@@ -2,7 +2,7 @@
 {-# GHC_OPTIONS -fth #-}
 -----------------------------------------------------------------------------
 -- |
--- Module      :  Type.Hex.Stage1
+-- Module      :  Data.Type.Hex.Stage1
 -- Copyright   :  (C) 2006 Edward Kmett
 -- License     :  BSD-style (see the file libraries/base/LICENSE)
 --
@@ -10,17 +10,17 @@
 -- Stability   :  experimental
 -- Portability :  non-portable (MPTC, FD, TH, undecidable instances, missing constructors)
 --
--- Stage1: Lay the ground work for all sorts of template haskell hackery 
+-- Stage1: Lay the ground work for all sorts of Template Haskell hackery 
 -- in the later stages. Only a handful of class specifications in this file
 -- are for later public consumption, and none of those are fleshed out here.
 --
 -- This multiple-stage implementation is necessitated by the way Template 
 -- Haskell is implemented in GHC.
 ----------------------------------------------------------------------------
-module Type.Hex.Stage1 where
+module Data.Type.Hex.Stage1 where
 
-import Type.Boolean
-import Type.Sign
+import Data.Type.Boolean
+import Data.Type.Sign
 import Control.Monad
 import Language.Haskell.TH
 
@@ -80,7 +80,6 @@ class THex a where fromTHex :: Integral b => a -> b
 thex = conT $ mkName "THex"
 class SHR1 a b c | a b -> c
 shr1 = conT $ mkName "SHR1"
-
 
 wrapMI list f = (flip mapM) list $ \v -> do
 	i <- f v

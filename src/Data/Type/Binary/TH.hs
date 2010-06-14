@@ -1,7 +1,7 @@
 {-# OPTIONS -fth #-}
 -----------------------------------------------------------------------------
 -- |
--- Module      :  Type.Binary.TH
+-- Module      :  Data.Type.Binary.TH
 -- Copyright   :  (C) 2006 Edward Kmett
 -- License     :  BSD-style (see the file libraries/base/LICENSE)
 --
@@ -13,9 +13,9 @@
 -- $(binaryE 24) returns an undefined value with the same type as the 
 -- Type.Binary with value 24.
 -----------------------------------------------------------------------------
-module Type.Binary.TH ( binaryE, binaryT ) where
+module Data.Type.Binary.TH ( binaryE, binaryT ) where
 
-import Type.Binary.Internals
+import Data.Type.Binary.Internals
 import Language.Haskell.TH
 
 f = conT $ mkName "F"
@@ -28,7 +28,7 @@ binaryT :: Integral a => a -> TypeQ
 binaryT n = case n of
     0  -> f
     -1 -> t
-    n  -> appT (if (n `mod` 2) == 0 then o else i)$ binaryT $ n `div` 2
+    n  -> appT (if (n `mod` 2) == 0 then o else i) $ binaryT $ n `div` 2
 
 -- | $(binaryE n) returns an undefined value of the appropriate TBinary instance
 binaryE :: Integral a => a -> ExpQ

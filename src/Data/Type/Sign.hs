@@ -1,8 +1,19 @@
-module Type.Sign (TSign, Negative, Positive, SignZero) where
+-----------------------------------------------------------------------------
+-- |
+-- Module      :  Data.Type.Sign
+-- Copyright   :  (C) 2006 Edward Kmett
+-- License     :  BSD-style (see the file libraries/base/LICENSE)
+--
+-- Maintainer  :  Edward Kmett <ekmett@gmail.com>
+-- Stability   :  experimental
+-- Portability :  non-portable (MPTC, FD, and missing constructors)
+--
+-- Used to express trichotomy at the type level.
+-----------------------------------------------------------------------------
+module Data.Type.Sign (TSign, Negative, Positive, SignZero) where
 
--- TODO: order them naturally?
-import Type.Boolean
-import Type.Ord
+import Data.Type.Boolean
+import Data.Type.Ord
 
 data Closure
 class Closed a | -> a

@@ -3,7 +3,7 @@
 {-# GHC_OPTIONS -fallow-undecidable-instances #-}
 -----------------------------------------------------------------------------
 -- |
--- Module      :  Type.Binary
+-- Module      :  Data.Type.Binary
 -- Copyright   :  (C) 2006 Edward Kmett
 -- License     :  BSD-style (see the file libraries/base/LICENSE)
 --
@@ -17,7 +17,7 @@
 --
 -- The numbers are represented as a Boolean Ring over a countable set of
 -- variables, in which for every element in the set there exists an n in N
--- and a b in {T,F} such that for all n'>=n in N, x_i = b.
+-- and a b in {T,F} such that forall n' >= n in N, x_i = b.
 --
 -- For uniqueness we always choose the least such n when representing numbers
 -- this allows us to run most computations backwards. When we can't, and such
@@ -32,49 +32,17 @@
 -- complement binary number. I'm particularly fond of the symmetry exhibited
 -- in the full adder.
 --
--- TODO: TDivMod, TImplies, TGCD, TBit, TComplementBit, TSetBit
+-- TODO: @TDivMod, TImplies, TGCD, TBit, TComplementBit, TSetBit@
 ----------------------------------------------------------------------------
 
-module Type.Binary (
-	O, I,
-	TBinary, fromTBinary,
-	TIsZero, TIsPositive, TIsNegative,
-	tIsZero, tIsPositive, tIsNegative,
-	LSB, tLSB,
-	TNeg, tNeg,
-	TSucc, tSucc, tPred,
-	TAdd, tAdd, tSub,
-	TMul, tMul,
-	TPow, tPow,
-	TShift, tShift,
-	TNF, tNF,
-	TAbs, tAbs,
-	TGetBit, tGetBit,
-	TSetBit, tSetBit,
-	TUnSetBit, tUnSetBit,
-	TChangeBit, tChangeBit,
-	TComplementBit, tComplementBit,
-	TCountBits, tCountBits,
-	-- re-exported from Type.Boolean
-	T, tT,
-	F, tF,
-	TNot, tNot,
-	TAnd, tAnd,
-	TOr, tOr,
-	TXOr, tXOr,
-	TImplies, tImplies,
-	-- re-exported from Type.Ord
-	TEq, tEq,
-	TLt, tLt,
-	TLe, tLe,
-	TGt, tGt,
-	TGe, tGe,
-	-- re-exported from Type.Binary.TH
-	binaryE,
-	binaryT
-) where
+module Data.Type.Binary 
+	( module Data.Type.Binary.Internals
+	, module Data.Type.Boolean
+	, module Data.Type.Ord
+	, module Data.Type.Binary.TH
+	) where
 
-import Type.Boolean
-import Type.Ord
-import Type.Binary.Internals
-import Type.Binary.TH
+import Data.Type.Boolean
+import Data.Type.Ord
+import Data.Type.Binary.Internals
+import Data.Type.Binary.TH

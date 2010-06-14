@@ -2,8 +2,8 @@
 {-# OPTIONS -fallow-undecidable-instances #-}	-- needed for all type LHSs
 -----------------------------------------------------------------------------
 -- |
--- Module      :  Type.Binary.Internals
--- Copyright   :  (C) 2006 Edward Kmett
+-- Module      :  Data.Type.Binary.Internals
+-- Copyright   :  (C) 2006-2007 Edward Kmett
 -- License     :  BSD-style (see the file libraries/base/LICENSE)
 --
 -- Maintainer  :  Edward Kmett <ekmett@gmail.com>
@@ -29,14 +29,14 @@
 -- TODO: TDivMod, TGCD
 ----------------------------------------------------------------------------
 
-module Type.Binary.Internals (
+module Data.Type.Binary.Internals (
 	O,
 	I,
-	T, tT,
-	F, tF,
+	-- T, tT,
+	-- F, tF,
 	TSucc, tSucc, tPred,
 	TCBinary, TBinary, fromTBinary,
-	TNot,
+	-- TNot,
 	TNeg, tNeg,
 	TIsNegative, tIsNegative,
 	TIsPositive, tIsPositive,
@@ -46,8 +46,8 @@ module Type.Binary.Internals (
 	TAdd, tAdd, tSub,
 	TMul, tMul,
 	TPow, tPow,
-	TAnd, TOr, TXOr, TImplies,
-	tAnd, tOr, tXOr, tImplies,
+	-- TAnd, TOr, TXOr, TImplies,
+	-- tAnd, tOr, tXOr, tImplies,
 	TShift, tShift,
 	TGetBit, tGetBit,
 	TSetBit, tSetBit,
@@ -59,7 +59,7 @@ module Type.Binary.Internals (
 	TAbs, tAbs,
 	TNF, tNF,		-- put a number into normal form
 	t2n, t2np1,		-- prepend a 0 or 1
-	TEq, TLt, tEq, tLt,
+	-- TEq, TLt, tEq, tLt,
 
 	-- from Type.Sign
 	Negative, Positive, SignZero,
@@ -72,13 +72,13 @@ module Type.Binary.Internals (
 	TSub', tSub',  		-- semi-sub
 	TCountBits',		-- sign-tracking intermediary for TCountBits
 	LSB, tLSB, tBSL,	-- extract the LSB and tail of a number
-	XI, XO			-- indicates that the number can be extended
+	XI, XO,			-- indicates that the number can be extended
 				-- by a I or O without leaving normal form
 ) where
 
-import Type.Boolean
-import Type.Ord
-import Type.Sign
+import Data.Type.Boolean
+import Data.Type.Ord
+import Data.Type.Sign
 
 data O a
 data I a

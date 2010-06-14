@@ -4,7 +4,7 @@
 {-# GHC_OPTIONS -cpp #-}
 -----------------------------------------------------------------------------
 -- |
--- Module      :  Type.Hex.Stage2
+-- Module      :  Data.Type.Hex.Stage2
 -- Copyright   :  (C) 2006 Edward Kmett
 -- License     :  BSD-style (see the file libraries/base/LICENSE)
 --
@@ -19,11 +19,11 @@
 -- This multiple-stage implementation is necessitated by the way Template 
 -- Haskell is implemented in GHC.
 ----------------------------------------------------------------------------
-module Type.Hex.Stage2 where
+module Data.Type.Hex.Stage2 where
 
-import Type.Boolean
+import Data.Type.Boolean
 import Control.Monad
-import Type.Hex.Stage1
+import Data.Type.Hex.Stage1
 import Language.Haskell.TH
 
 #ifndef __HADDOCK__

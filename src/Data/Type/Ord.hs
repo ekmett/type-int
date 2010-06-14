@@ -2,8 +2,8 @@
 {-# OPTIONS -fallow-undecidable-instances #-}
 -----------------------------------------------------------------------------
 -- |
--- Module      :  Type.Ord
--- Copyright   :  (C) 2006 Edward Kmett
+-- Module      :  Data.Type.Ord
+-- Copyright   :  (C) 2006-2007 Edward Kmett
 -- License     :  BSD-style (see the file LICENSE)
 --
 -- Maintainer  :  Edward Kmett <ekmett@gmail.com>
@@ -16,7 +16,7 @@
 -- Instances should all really be decidable.
 ----------------------------------------------------------------------------
 
-module Type.Ord
+module Data.Type.Ord
 	( TEq, tEq
 	, TLt, tLt
 	, TGe, tGe -- closed, extend via TEq/TLt
@@ -24,7 +24,7 @@ module Type.Ord
 	, TGt, tGt -- closed, extend via TEq/TLt
 ) where
 
-import Type.Boolean
+import Data.Type.Boolean
 
 data Closure
 class Closed a | -> a
