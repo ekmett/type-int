@@ -1,7 +1,4 @@
-{-# GHC_OPTIONS -fglasgow-exts #-}
-{-# GHC_OPTIONS -fth #-}
-{-# GHC_OPTIONS -fallow-undecidable-instances #-}
-{-# GHC_OPTIONS -cpp #-}
+{-# LANGUAGE TemplateHaskell, UndecidableInstances, CPP #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Type.Hex.Stage2

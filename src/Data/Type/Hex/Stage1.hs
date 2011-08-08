@@ -1,5 +1,4 @@
-{-# GHC_OPTIONS -fglasgow-exts #-}
-{-# GHC_OPTIONS -fth #-}
+{-# LANGUAGE TemplateHaskell #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Type.Hex.Stage1

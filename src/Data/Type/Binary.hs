@@ -1,6 +1,4 @@
-{-# GHC_OPTIONS -fglasgow-exts #-}
-{-# GHC_OPTIONS -fth #-}
-{-# GHC_OPTIONS -fallow-undecidable-instances #-}
+{-# LANGUAGE TemplateHaskell, UndecidableInstances #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Type.Binary

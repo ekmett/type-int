@@ -1,5 +1,4 @@
-{-# OPTIONS -fglasgow-exts #-}
-{-# OPTIONS -fallow-undecidable-instances #-}
+{-# LANGUAGE UndecidableInstances #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Type.Ord

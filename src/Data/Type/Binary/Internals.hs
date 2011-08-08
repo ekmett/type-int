@@ -1,5 +1,5 @@
-{-# OPTIONS -fglasgow-exts #-}			-- MPTC, Fundeps
-{-# OPTIONS -fallow-undecidable-instances #-}	-- needed for all type LHSs
+{-# LANGUAGE MultiParamTypeClasses, FunctionalDependencies,
+             UndecidableInstances, ScopedTypeVariables #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Type.Binary.Internals
