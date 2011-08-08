@@ -1,4 +1,4 @@
-{-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE UndecidableInstances, FlexibleContexts, FlexibleInstances #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Type.Ord
@@ -16,11 +16,11 @@
 ----------------------------------------------------------------------------
 
 module Data.Type.Ord
-	( TEq, tEq
-	, TLt, tLt
-	, TGe, tGe -- closed, extend via TEq/TLt
-	, TLe, tLe -- closed, extend via TEq/TLt
-	, TGt, tGt -- closed, extend via TEq/TLt
+    ( TEq, tEq
+    , TLt, tLt
+    , TGe, tGe -- closed, extend via TEq/TLt
+    , TLe, tLe -- closed, extend via TEq/TLt
+    , TGt, tGt -- closed, extend via TEq/TLt
 ) where
 
 import Data.Type.Boolean

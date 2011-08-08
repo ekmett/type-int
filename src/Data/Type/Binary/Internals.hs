@@ -1,5 +1,6 @@
 {-# LANGUAGE MultiParamTypeClasses, FunctionalDependencies,
-             UndecidableInstances, ScopedTypeVariables #-}
+             UndecidableInstances, ScopedTypeVariables,
+             FlexibleContexts, FlexibleInstances #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Type.Binary.Internals
@@ -30,50 +31,50 @@
 ----------------------------------------------------------------------------
 
 module Data.Type.Binary.Internals (
-	O,
-	I,
-	-- T, tT,
-	-- F, tF,
-	TSucc, tSucc, tPred,
-	TCBinary, TBinary, fromTBinary,
-	-- TNot,
-	TNeg, tNeg,
-	TIsNegative, tIsNegative,
-	TIsPositive, tIsPositive,
-	TIsZero, tIsZero,
-	TEven, tEven,
-	TOdd, tOdd,
-	TAdd, tAdd, tSub,
-	TMul, tMul,
-	TPow, tPow,
-	-- TAnd, TOr, TXOr, TImplies,
-	-- tAnd, tOr, tXOr, tImplies,
-	TShift, tShift,
-	TGetBit, tGetBit,
-	TSetBit, tSetBit,
-	TChangeBit, tChangeBit,
-	TUnSetBit, tUnSetBit,
-	TComplementBit, tComplementBit,
-	TCountBits, tCountBits,	
-	{- TReverse, tReverse, -}
-	TAbs, tAbs,
-	TNF, tNF,		-- put a number into normal form
-	t2n, t2np1,		-- prepend a 0 or 1
-	-- TEq, TLt, tEq, tLt,
+    O,
+    I,
+    -- T, tT,
+    -- F, tF,
+    TSucc, tSucc, tPred,
+    TCBinary, TBinary, fromTBinary,
+    -- TNot,
+    TNeg, tNeg,
+    TIsNegative, tIsNegative,
+    TIsPositive, tIsPositive,
+    TIsZero, tIsZero,
+    TEven, tEven,
+    TOdd, tOdd,
+    TAdd, tAdd, tSub,
+    TMul, tMul,
+    TPow, tPow,
+    -- TAnd, TOr, TXOr, TImplies,
+    -- tAnd, tOr, tXOr, tImplies,
+    TShift, tShift,
+    TGetBit, tGetBit,
+    TSetBit, tSetBit,
+    TChangeBit, tChangeBit,
+    TUnSetBit, tUnSetBit,
+    TComplementBit, tComplementBit,
+    TCountBits, tCountBits, 
+    {- TReverse, tReverse, -}
+    TAbs, tAbs,
+    TNF, tNF,       -- put a number into normal form
+    t2n, t2np1,     -- prepend a 0 or 1
+    -- TEq, TLt, tEq, tLt,
 
-	-- from Type.Sign
-	Negative, Positive, SignZero,
-	-- internal interfaces below here
-	-- these require knowledge of the internal representation
-	TShift', 		-- non-normalizing shifter
-	TNF', 			-- case tracking normalizer for a number.
-	TAddC',  		-- non-normalizing full-adder
-	TAdd', tAdd',  		-- semi-adder
-	TSub', tSub',  		-- semi-sub
-	TCountBits',		-- sign-tracking intermediary for TCountBits
-	LSB, tLSB, tBSL,	-- extract the LSB and tail of a number
-	XI, XO,			-- indicates that the number can be extended
-				-- by a I or O without leaving normal form
+    -- from Type.Sign
+    Negative, Positive, SignZero,
+    -- internal interfaces below here
+    -- these require knowledge of the internal representation
+    TShift',        -- non-normalizing shifter
+    TNF',           -- case tracking normalizer for a number.
+    TAddC',         -- non-normalizing full-adder
+    TAdd', tAdd',       -- semi-adder
+    TSub', tSub',       -- semi-sub
+    TCountBits',        -- sign-tracking intermediary for TCountBits
+    LSB, tLSB, tBSL,    -- extract the LSB and tail of a number
+    XI, XO,         -- indicates that the number can be extended
+                -- by a I or O without leaving normal form
 ) where
 
 import Data.Type.Boolean
@@ -135,11 +136,11 @@ instance (TCBinary c a, XI a) => TCBinary c (I a)
 
 -- | We don't want to have to carry the closure parameter around explicitly everywhere, so we
 --   shed it here.
-class TCBinary Closure a => TBinary a 		where fromTBinary :: Integral b => a -> b
-instance TBinary F 				where fromTBinary _ = fromInteger 0
-instance TBinary T 				where fromTBinary _ = fromInteger (-1)
-instance (TBinary a, XO a) => TBinary (O a) 	where fromTBinary _ = let x = fromTBinary (undefined::a) in x+x
-instance (TBinary a, XI a) => TBinary (I a) 	where fromTBinary _ = let x = fromTBinary (undefined::a) in succ(x+x)
+class TCBinary Closure a => TBinary a       where fromTBinary :: Integral b => a -> b
+instance TBinary F              where fromTBinary _ = fromInteger 0
+instance TBinary T              where fromTBinary _ = fromInteger (-1)
+instance (TBinary a, XO a) => TBinary (O a)     where fromTBinary _ = let x = fromTBinary (undefined::a) in x+x
+instance (TBinary a, XI a) => TBinary (I a)     where fromTBinary _ = let x = fromTBinary (undefined::a) in succ(x+x)
 
 -- | Show should express a value as legal haskell.
 instance TBinary (O a) => Show (O a) where show n = "$(binaryE "++(show $ fromTBinary n)++")"

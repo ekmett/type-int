@@ -1,4 +1,5 @@
-{-# LANGUAGE TemplateHaskell, UndecidableInstances, CPP #-}
+{-# LANGUAGE TemplateHaskell, FlexibleInstances, UndecidableInstances,
+             FlexibleContexts, ScopedTypeVariables, CPP #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Type.Hex.Stage2
@@ -24,17 +25,28 @@ import Data.Type.Hex.Stage1
 import Language.Haskell.TH
 
 #ifndef __HADDOCK__
-$(mapM mkXT xn)
-$(mapM mkHT hn)
+$(return $ map mkXT xn)
+$(return $ map mkHT hn)
 #endif
 
 -- | extract the least signficant nybble from a hex number
 instance LSN F H0 F
 instance LSN T HF T
 #ifndef __HADDOCK__
-$( wrapMI xhF $ \(x,h) -> lsn `appT` (appT x t) `appT` h `appT` t)
-$( wrapMI xh0 $ \(x,h) -> lsn `appT` (appT x f) `appT` h `appT` f)
-$( wrapMI (liftM2 (,) xh x) $ \((x,h),x') -> let axa = appT x' va in lsn `appT` (appT x axa) `appT` h `appT` axa)
+$( return $ wrapI xhF $ \(x,h) ->
+                          (ConT lsn)
+                          `AppT` (AppT x (ConT t))
+                          `AppT` h
+                          `AppT` (ConT t))
+$( return $ wrapI xh0 $ \(x,h) ->
+                          (ConT lsn)
+                          `AppT` (AppT x (ConT f))
+                          `AppT` h
+                          `AppT` (ConT f))
+$( return $ wrapI (zip xh x)
+                  $ \((x, h), x') ->
+                       let axa = AppT x' (VarT a)
+                       in (ConT lsn) `AppT` (AppT x axa) `AppT` h `AppT` axa)
 #endif
 tLSN :: LSN a d a' => a -> (d,a'); tLSN = undefined
 tNSL :: LSN a d a' => a' -> d -> a; tNSL = undefined
@@ -67,12 +79,18 @@ instance (THex a, ExtF a) => THex (DF a)     where fromTHex _ = let x = fromTHex
 instance TEven F T
 instance TEven T F 
 #ifndef __HADDOCK__
-$( wrapMI (zip x [0..15]) $ \(x,n) -> teven `appT` (appT x va) `appT` (if n `mod` 2 == 0 then t else f) )
+$( return $ wrapI (zip x [0..15])
+                  $ \(x, n) ->
+                      (ConT teven)
+                      `AppT` (AppT x (VarT a))
+                      `AppT` (ConT $ if n `mod` 2 == 0 then t else f) )
 
-$( mapM (\(x,y) -> do
-	c <- tnot `appT` va `appT` vb
-	i <- tnot `appT` (appT x va) `appT` (appT y vb)
-	return $ InstanceD [c] i []) $ zip x (reverse x))
+$( return $ map (\(x, y) ->
+                   let i = ConT tnot
+                           `AppT` (AppT x (VarT a))
+                           `AppT` (AppT y (VarT b))
+                   in InstanceD [ClassP tnot [VarT a, VarT b]] i [])
+                $ zip x (reverse x))
 #endif
 
 class TOdd a b' 
@@ -85,14 +103,27 @@ instance TNF' (DF T) T F
 instance (TNF' (DF a) c b, TIf b (DF c) T d) => TNF' (DF (DF a)) d b
 instance (TNF' (D0 a) c b, TIf b (D0 c) F d) => TNF' (D0 (D0 a)) d b
 #ifndef __HADDOCK__
-$( wrapMI x0 $ \x -> tnf' `appT` (appT x f) `appT` (appT x f) `appT` t)
-$( wrapMI xF $ \x -> tnf' `appT` (appT x t) `appT` (appT x t) `appT` t)
+$( return $ wrapI x0 $ \x -> ConT tnf'
+                             `AppT` (AppT x (ConT f))
+                             `AppT` (AppT x (ConT f))
+                             `AppT` (ConT t))
+$( return $ wrapI xF $ \x -> ConT tnf'
+                             `AppT` (AppT x (ConT t))
+                             `AppT` (AppT x (ConT t))
+                             `AppT` (ConT t))
 $( let xn = zip x [0..15]
        xn2 = liftM2 (,) xn xn
        list' = (flip filter) xn2 $ \((_,n),(_,m)) -> if n == 0 then m /= 0 else (if n == 15 then m /= 15 else True)
        list = map (\((x,_),(y,_)) -> (x,y)) list'
-   in (flip mapM) list $ \(x,y) -> do
-	pre <- tnf' `appT` (appT x va) `appT` vc `appT` vb
-	post <- tnf' `appT` (appT y (appT x va)) `appT` (appT y vc) `appT` vb
-	return $ InstanceD [pre] post [])
+   in return $ (flip map) list $ \(x,y) ->
+    let post = (ConT tnf')
+               `AppT` (AppT y (AppT x (VarT a)))
+               `AppT` (AppT y (VarT c))
+               `AppT` VarT b
+    in InstanceD [ClassP tnf'
+                         [AppT x (VarT a),
+                          VarT c,
+                          VarT b]]
+                 post
+                 [])
 #endif
