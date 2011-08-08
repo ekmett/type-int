@@ -1,4 +1,4 @@
-{-# LANGUAGE UndecidableInstances, FlexibleContexts, FlexibleInstances #-}
+{-# LANGUAGE UndecidableInstances, FlexibleContexts, FlexibleInstances, EmptyDataDecls, MultiParamTypeClasses, FunctionalDependencies #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Type.Ord

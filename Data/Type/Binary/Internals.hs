@@ -1,6 +1,4 @@
-{-# LANGUAGE MultiParamTypeClasses, FunctionalDependencies,
-             UndecidableInstances, ScopedTypeVariables,
-             FlexibleContexts, FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses, FunctionalDependencies, UndecidableInstances, ScopedTypeVariables, FlexibleContexts, FlexibleInstances, EmptyDataDecls #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Type.Binary.Internals

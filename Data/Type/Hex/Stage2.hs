@@ -1,5 +1,4 @@
-{-# LANGUAGE TemplateHaskell, FlexibleInstances, UndecidableInstances,
-             FlexibleContexts, ScopedTypeVariables, CPP #-}
+{-# LANGUAGE ScopedTypeVariables, TemplateHaskell, MultiParamTypeClasses, FlexibleInstances, FlexibleContexts, UndecidableInstances, FunctionalDependencies, EmptyDataDecls #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Type.Hex.Stage2
@@ -24,30 +23,26 @@ import Control.Monad
 import Data.Type.Hex.Stage1
 import Language.Haskell.TH
 
-#ifndef __HADDOCK__
-$(return $ map mkXT xn)
-$(return $ map mkHT hn)
-#endif
+return $ map mkXT xn
+return $ map mkHT hn
 
 -- | extract the least signficant nybble from a hex number
 instance LSN F H0 F
 instance LSN T HF T
-#ifndef __HADDOCK__
-$( return $ wrapI xhF $ \(x,h) ->
-                          (ConT lsn)
-                          `AppT` (AppT x (ConT t))
+return $ wrapI xhF $ \(x,h) ->
+                          ConT lsn
+                          `AppT` AppT x (ConT t)
                           `AppT` h
-                          `AppT` (ConT t))
-$( return $ wrapI xh0 $ \(x,h) ->
-                          (ConT lsn)
-                          `AppT` (AppT x (ConT f))
+                          `AppT` ConT t
+return $ wrapI xh0 $ \(x,h) ->
+                          ConT lsn
+                          `AppT` AppT x (ConT f)
                           `AppT` h
-                          `AppT` (ConT f))
-$( return $ wrapI (zip xh x)
+                          `AppT` ConT f
+return $ wrapI (zip xh x)
                   $ \((x, h), x') ->
                        let axa = AppT x' (VarT a)
-                       in (ConT lsn) `AppT` (AppT x axa) `AppT` h `AppT` axa)
-#endif
+                       in ConT lsn `AppT` AppT x axa `AppT` h `AppT` axa
 tLSN :: LSN a d a' => a -> (d,a'); tLSN = undefined
 tNSL :: LSN a d a' => a' -> d -> a; tNSL = undefined
 
@@ -78,20 +73,18 @@ instance (THex a, ExtF a) => THex (DF a)     where fromTHex _ = let x = fromTHex
 
 instance TEven F T
 instance TEven T F 
-#ifndef __HADDOCK__
-$( return $ wrapI (zip x [0..15])
+return $ wrapI (zip x [0..15])
                   $ \(x, n) ->
-                      (ConT teven)
-                      `AppT` (AppT x (VarT a))
-                      `AppT` (ConT $ if n `mod` 2 == 0 then t else f) )
+                      ConT teven
+                      `AppT` AppT x (VarT a)
+                      `AppT` ConT (if n `mod` 2 == 0 then t else f) 
 
-$( return $ map (\(x, y) ->
+return $ map (\(x, y) ->
                    let i = ConT tnot
-                           `AppT` (AppT x (VarT a))
-                           `AppT` (AppT y (VarT b))
+                           `AppT` AppT x (VarT a)
+                           `AppT` AppT y (VarT b)
                    in InstanceD [ClassP tnot [VarT a, VarT b]] i [])
-                $ zip x (reverse x))
-#endif
+                $ zip x (reverse x)
 
 class TOdd a b' 
 instance (TEven a b, TNot b b') => TOdd a b'
@@ -102,28 +95,21 @@ instance TNF' (D0 F) F F
 instance TNF' (DF T) T F
 instance (TNF' (DF a) c b, TIf b (DF c) T d) => TNF' (DF (DF a)) d b
 instance (TNF' (D0 a) c b, TIf b (D0 c) F d) => TNF' (D0 (D0 a)) d b
-#ifndef __HADDOCK__
-$( return $ wrapI x0 $ \x -> ConT tnf'
-                             `AppT` (AppT x (ConT f))
-                             `AppT` (AppT x (ConT f))
-                             `AppT` (ConT t))
-$( return $ wrapI xF $ \x -> ConT tnf'
-                             `AppT` (AppT x (ConT t))
-                             `AppT` (AppT x (ConT t))
-                             `AppT` (ConT t))
-$( let xn = zip x [0..15]
-       xn2 = liftM2 (,) xn xn
-       list' = (flip filter) xn2 $ \((_,n),(_,m)) -> if n == 0 then m /= 0 else (if n == 15 then m /= 15 else True)
-       list = map (\((x,_),(y,_)) -> (x,y)) list'
-   in return $ (flip map) list $ \(x,y) ->
-    let post = (ConT tnf')
-               `AppT` (AppT y (AppT x (VarT a)))
-               `AppT` (AppT y (VarT c))
+return $ wrapI x0 $ \x -> ConT tnf'
+                             `AppT` AppT x (ConT f)
+                             `AppT` AppT x (ConT f)
+                             `AppT` ConT t
+return $ wrapI xF $ \x -> ConT tnf'
+                             `AppT` AppT x (ConT t)
+                             `AppT` AppT x (ConT t)
+                             `AppT` ConT t
+let xn = zip x [0..15]
+    xn2 = liftM2 (,) xn xn
+    list' = flip filter xn2 $ \((_,n),(_,m)) -> if n == 0 then m /= 0 else (if n == 15 then m /= 15 else True)
+    list = map (\((x,_),(y,_)) -> (x,y)) list'
+ in return $ (flip map) list $ \(x,y) ->
+    let post = ConT tnf'
+               `AppT` AppT y (AppT x (VarT a))
+               `AppT` AppT y (VarT c)
                `AppT` VarT b
-    in InstanceD [ClassP tnf'
-                         [AppT x (VarT a),
-                          VarT c,
-                          VarT b]]
-                 post
-                 [])
-#endif
+     in InstanceD [ClassP tnf' [AppT x (VarT a), VarT c, VarT b]] post []

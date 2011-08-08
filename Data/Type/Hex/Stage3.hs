@@ -1,8 +1,8 @@
-{-# LANGUAGE TemplateHaskell, CPP, FlexibleContexts, FlexibleInstances #-}
+{-# LANGUAGE TemplateHaskell, CPP, FlexibleContexts, FlexibleInstances, MultiParamTypeClasses, FunctionalDependencies, UndecidableInstances #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Type.Hex.Stage3
--- Copyright   :  (C) 2006 Edward Kmett
+-- Copyright   :  (C) 2006-2011 Edward Kmett
 -- License     :  BSD-style (see the file libraries/base/LICENSE)
 --
 -- Maintainer  :  Edward Kmett <ekmett@gmail.com>
@@ -28,22 +28,21 @@ instance TSucc T F
 instance TSucc F (D1 F)
 instance TSucc (DE T) T
 instance (TSucc n m, ExtF n, Ext0 m) => TSucc (DF n) (D0 m)
-#ifndef __HADDOCK__
-$( return $ wrapI (zip (init x0) (tail x0))
-                  $ \(x1,x2) -> (ConT tsucc)
-                                `AppT` (AppT x1 (ConT f))
-                                `AppT` (AppT x2 (ConT f)))
-$( return $ wrapI (zip (init xF) (tail xF))
-                  $ \(x1,x2) -> (ConT tsucc)
-                                `AppT` (AppT x1 (ConT t))
-                                `AppT` (AppT x2 (ConT t)))
-$( return $ wrapI (liftM2 (,) (zip xF x0) x)
+
+return $ wrapI (zip (init x0) (tail x0))
+                  $ \(x1,x2) -> ConT tsucc
+                                `AppT` AppT x1 (ConT f)
+                                `AppT` AppT x2 (ConT f)
+return $ wrapI (zip (init xF) (tail xF))
+                  $ \(x1,x2) -> ConT tsucc
+                                `AppT` AppT x1 (ConT t)
+                                `AppT` AppT x2 (ConT t)
+return $ wrapI (liftM2 (,) (zip xF x0) x)
                   $ \((xn, xm), x) ->
                       let b = AppT x (VarT a)
-                      in (ConT tsucc)
-                         `AppT` (AppT xn b)
-                         `AppT` (AppT xm b))
-#endif
+                      in ConT tsucc
+                         `AppT` AppT xn b
+                         `AppT` AppT xm b
 tSucc :: TSucc n m => n -> m; tSucc = undefined
 tPred :: TSucc n m => m -> n; tPred = undefined
 
@@ -53,30 +52,26 @@ tNeg :: TNeg a b => a -> b; tNeg = undefined
 
 instance Trichotomy T Negative
 instance Trichotomy F SignZero
-#ifndef __HADDOCK__
-$( return $ wrapI x0 $ \x ->
-                        (ConT trichotomy)
-                        `AppT` (AppT x (ConT f))
-                        `AppT` (ConT positive) )
-$( return $ wrapI xF $ \x ->
-                        (ConT trichotomy)
-                        `AppT` (AppT x (ConT t))
-                        `AppT` (ConT negative) )
-$( let es = [extf, ext0]
-       ext0 = mkName "Ext0"
-       extf = mkName "ExtF"
-       df = mkName "DF"
-   in return $ (flip map) (zip x es)
-                          $ \(x, e) ->
+return $ wrapI x0 $ \x ->
+                        ConT trichotomy
+                        `AppT` AppT x (ConT f)
+                        `AppT` ConT positive
+return $ wrapI xF $ \x ->
+                        ConT trichotomy
+                        `AppT` AppT x (ConT t)
+                        `AppT` ConT negative 
+let es = [extf, ext0]
+    ext0 = mkName "Ext0"
+    extf = mkName "ExtF"
+    df = mkName "DF"
+ in return $ flip map (zip x es)
+                    $ \(x, e) ->
                               InstanceD [ClassP trichotomy [VarT a, VarT b],
                                          ClassP e [VarT a]]
                                         (ConT trichotomy
-                                         `AppT` (x
-                                                 `AppT` (ConT df
-                                                         `AppT` VarT a))
+                                         `AppT` (x `AppT` (ConT df `AppT` VarT a))
                                          `AppT` VarT b)
-                                        [])
-#endif
+                                        []
 
 class TIsPositive n b | n -> b
 instance (Trichotomy n s, TEq s Positive b) => TIsPositive n b
@@ -102,52 +97,51 @@ instance TSucc a b => TAddC' F (DF a) T (D0 b)
 instance TSucc b a => TAddC' T (D0 a) F (DF b)
 instance TSucc a b => TAddC' (DF a) F T (D0 b)
 instance TSucc b a => TAddC' (D0 a) T F (DF b)
-#ifndef __HADDOCK__
-$( return $ wrapI (liftM2 (,) [t, f] x)
+return $ wrapI (liftM2 (,) [t, f] x)
                   $ \(tf, dx) ->
                       let dxa = AppT dx (VarT a)
                       in ConT taddc'
                          `AppT` ConT tf
                          `AppT` dxa
                          `AppT` ConT tf
-                         `AppT` dxa)
-$( return $ wrapI (liftM2 (,) [t, f] x)
+                         `AppT` dxa
+return $ wrapI (liftM2 (,) [t, f] x)
                   $ \(tf, dx) ->
                       let dxa = AppT dx (VarT a)
                       in ConT taddc'
                          `AppT` dxa
                          `AppT` ConT tf
                          `AppT` ConT tf
-                         `AppT` dxa)
-$( return $ wrapI (zip xF x0)
+                         `AppT` dxa
+return $ wrapI (zip xF x0)
                   $ \(dn, dm) ->
                       ConT taddc'
                       `AppT` ConT f
-                      `AppT` (AppT dn (VarT a))
+                      `AppT` AppT dn (VarT a)
                       `AppT` ConT t
-                      `AppT` (AppT dm (VarT a)))
-$( return $ wrapI (zip xF x0)
+                      `AppT` AppT dm (VarT a)
+return $ wrapI (zip xF x0)
                   $ \(dn, dm) ->
                       ConT taddc'
                       `AppT` ConT t
-                      `AppT` (AppT dm (VarT a))
+                      `AppT` AppT dm (VarT a)
                       `AppT` ConT f
-                      `AppT` (AppT dn (VarT a)))
-$( return $ wrapI (zip xF x0)
+                      `AppT` AppT dn (VarT a)
+return $ wrapI (zip xF x0)
                   $ \(dn, dm) ->
                       ConT taddc'
-                      `AppT` (AppT dn (VarT a))
+                      `AppT` AppT dn (VarT a)
                       `AppT` ConT f
                       `AppT` ConT t
-                      `AppT` (AppT dm (VarT a)))
-$( return $ wrapI (zip xF x0)
+                      `AppT` AppT dm (VarT a)
+return $ wrapI (zip xF x0)
                   $ \(dn, dm) ->
                       ConT taddc'
-                      `AppT` (AppT dm (VarT a))
+                      `AppT` AppT dm (VarT a)
                       `AppT` ConT t
                       `AppT` ConT f
-                      `AppT` (AppT dn (VarT a)))
-$( return $ (flip map)
+                      `AppT` AppT dn (VarT a)
+return $ (flip map)
             (liftM3 (,,) (zip x [0..15]) (zip x [0..15]) [(f, 0), (t, 1)])
             $ \((x0, n0), (x1, n1), (thing1, thing2)) ->
                 let total = n0 + n1 + thing2
@@ -156,12 +150,11 @@ $( return $ (flip map)
                 in InstanceD [ClassP taddc'
                                      [VarT a, VarT b, ConT pcarry, VarT c]]
                              (ConT taddc'
-                              `AppT` (AppT x0 (VarT a))
-                              `AppT` (AppT x1 (VarT b))
-                              `AppT` (ConT thing1)
-                              `AppT` (AppT x2 (VarT c)))
-                             [])
-#endif
+                              `AppT` AppT x0 (VarT a)
+                              `AppT` AppT x1 (VarT b)
+                              `AppT` ConT thing1
+                              `AppT` AppT x2 (VarT c))
+                             []
 tAddC' :: TAddC' a b c d => a -> b -> c -> d; tAddC' = undefined
 tAddF' :: TAddC' a b F d => a -> b -> d; tAddF' = undefined
 
@@ -214,8 +207,7 @@ instance SHR1 H0 F F
 instance SHR1 H1 F (D1 F)
 instance SHR1 H0 T (DE T)
 instance SHR1 H1 T (DE T)
-#ifndef __HADDOCK__
-$( return $ wrapI (liftM3 (,,)
+return $ wrapI (liftM3 (,,)
                           (zip x [0..15])
                           (zip h [0..1])
                           (zip [t, f] [15, 0]))
@@ -228,9 +220,9 @@ $( return $ wrapI (liftM3 (,,)
                                     else ConT tf
                       in ConT shr1
                          `AppT` c
-                         `AppT` (AppT d (ConT tf))
-                         `AppT` (AppT dlsn dcase))
-$( return $ (flip map)
+                         `AppT` AppT d (ConT tf)
+                         `AppT` AppT dlsn dcase
+return $ (flip map)
             (liftM3 (,,)
                     (zip x [0..15])
                     (zip h [0..1])
@@ -245,10 +237,9 @@ $( return $ (flip map)
                 in InstanceD [ClassP shr1 [pre_c, dna, dn'b]]
                              (ConT shr1
                               `AppT` c
-                              `AppT` (AppT dm dna)
-                              `AppT` (AppT dm' dn'b))
-                             [])
-#endif
+                              `AppT` AppT dm dna
+                              `AppT` AppT dm' dn'b)
+                             []
 
 -- | A simple peasant multiplier. TODO: exploit 2s complement and reverse the worst cases
 class TMul a b c | a b -> c

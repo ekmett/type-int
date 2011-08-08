@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleContexts, FlexibleInstances #-}
+{-# LANGUAGE FlexibleContexts, FlexibleInstances, EmptyDataDecls, FunctionalDependencies, MultiParamTypeClasses, UndecidableInstances #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Type.Boolean
@@ -7,7 +7,7 @@
 --
 -- Maintainer  :  Edward Kmett <ekmett@gmail.com>
 -- Stability   :  experimental
--- Portability :  non-portable (FD and MPTC. no constructor data types)
+-- Portability :  non-portable (FD and MPTC. empty data decls)
 --
 -- Simple closed type-level booleans.
 ----------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell, MultiParamTypeClasses, FlexibleInstances, FlexibleContexts, UndecidableInstances, FunctionalDependencies  #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Type.Hex.Stage1

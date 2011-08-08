@@ -1,3 +1,4 @@
+{-# LANGUAGE MultiParamTypeClasses, FunctionalDependencies, UndecidableInstances, EmptyDataDecls, FlexibleContexts #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Type.Sign
