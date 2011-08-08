@@ -1,6 +1,4 @@
-{-# GHC_OPTIONS -fglasgow-exts #-}
-{-# GHC_OPTIONS -fth #-}
-{-# GHC_OPTIONS -fallow-undecidable-instances #-}
+{-# LANGUAGE TemplateHaskell, UndecidableInstances #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Type.Binary
@@ -36,11 +34,11 @@
 ----------------------------------------------------------------------------
 
 module Data.Type.Binary 
-	( module Data.Type.Binary.Internals
-	, module Data.Type.Boolean
-	, module Data.Type.Ord
-	, module Data.Type.Binary.TH
-	) where
+    ( module Data.Type.Binary.Internals
+    , module Data.Type.Boolean
+    , module Data.Type.Ord
+    , module Data.Type.Binary.TH
+    ) where
 
 import Data.Type.Boolean
 import Data.Type.Ord

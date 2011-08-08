@@ -1,5 +1,4 @@
-{-# GHC_OPTIONS -fglasgow-exts #-}
-{-# GHC_OPTIONS -fth #-}
+{-# LANGUAGE TemplateHaskell #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Type.Hex.Stage1
@@ -24,65 +23,78 @@ import Data.Type.Sign
 import Control.Monad
 import Language.Haskell.TH
 
-t = conT $ mkName "T"
-f = conT $ mkName "F"
+t, f :: Name
+t = mkName "T"
+f = mkName "F"
 
+hex :: String
 hex = "0123456789ABCDEF"
 
+xn, hn :: [Name]
 xn = map (\x -> mkName $ "D"++return x) hex 
 hn = map (\x -> mkName $ "H"++return x) hex 
 
-x = map conT xn
-h = map conT hn
+x, h :: [Type]
+xh :: [(Type, Type)]
+x = map ConT xn
+h = map ConT hn
 xh = zip x h
 
+x0, h0 :: [Type]
+xh0 :: [(Type, Type)]
 x0 = tail x
 h0 = tail h
 xh0 = tail xh
 
+xF, hF :: [Type]
+xhF :: [(Type, Type)]
 xF = init x
 hF = init h
 xhF = zip xF hF
 
+x0F :: [Type]
 x0F = tail xF
 
-a = mkName "a"; va = varT a
-b = mkName "b"; vb = varT b
-c = mkName "c"; vc = varT c
-d = mkName "d"; vd = varT d
+a, b, c, d :: Name
+a = mkName "a"
+b = mkName "b"
+c = mkName "c"
+d = mkName "d"
 
-mkXT :: Name -> DecQ
-mkXT n = return $ DataD [] n [a] [] []
+mkXT :: Name -> Dec
+mkXT n = DataD [] n [PlainTV a] [] []
 
-mkHT :: Name -> DecQ
-mkHT n = return $ DataD [] n [] [] []
+mkHT :: Name -> Dec
+mkHT n = DataD [] n [] [] []
 
 -- imports
-tnot = conT $ mkName "TNot"
-positive = conT $ mkName "Positive"
-negative = conT $ mkName "Negative"
-signzero = conT $ mkName "SignZero"
+tnot, positive, negative, signzero :: Name
+tnot = mkName "TNot"
+positive = mkName "Positive"
+negative = mkName "Negative"
+signzero = mkName "SignZero"
 
 -- to be fleshed out when available
 class LSN a d a' | a -> d a', d a' -> a
-lsn = conT $ mkName "LSN"
 class Trichotomy n s | n -> s
-trichotomy = conT $ mkName "Trichotomy"
 class TEven a b | a -> b
-teven = conT $ mkName "TEven"
 class TSucc n m | n -> m, m -> n
-tsucc = conT $ mkName "TSucc"
 class TAddC' a b c d | a b c -> d
-taddc' = conT $ mkName "TAddC'"
 class TNF' a b c | a -> b c
-tnf' = conT $ mkName "TNF'"
 class THex a where fromTHex :: Integral b => a -> b
-thex = conT $ mkName "THex"
 class SHR1 a b c | a b -> c
-shr1 = conT $ mkName "SHR1"
+lsn, trichotomy, teven, tsucc, taddc', tnf', thex, shr1 :: Name
+lsn = mkName "LSN"
+trichotomy = mkName "Trichotomy"
+teven = mkName "TEven"
+tsucc = mkName "TSucc"
+taddc' = mkName "TAddC'"
+tnf' = mkName "TNF'"
+thex = mkName "THex"
+shr1 = mkName "SHR1"
 
-wrapMI list f = (flip mapM) list $ \v -> do
-	i <- f v
-	return $ InstanceD [] i []
+wrapI :: [a] -> (a -> Type) -> [Dec]
+wrapI list f = map (\v -> InstanceD [] (f v) []) list
 
+concatMapM :: (Monad m) => (a -> m [b]) -> [a] -> m [b]
 concatMapM f = liftM concat . mapM f
