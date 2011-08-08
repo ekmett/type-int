@@ -1,4 +1,4 @@
-{-# OPTIONS -fth #-}
+{-# LANGUAGE TemplateHaskell #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Type.Binary.TH
