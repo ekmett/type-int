@@ -1,6 +1,6 @@
 name:          type-int
 category:      Type
-version:       0.5
+version:       0.5.0.1
 license:       BSD3
 license-file:  LICENSE
 author:        Edward Kmett
@@ -20,15 +20,18 @@ source-repository head
 
 Library
   exposed-modules:
-    Data.Type.Boolean, 
-    Data.Type.Ord, 
-    Data.Type.Binary, 
-    Data.Type.Binary.Internals, 
-    Data.Type.Binary.TH,
-    Data.Type.Hex,
-    Data.Type.Hex.Stage1,
-    Data.Type.Hex.Stage2,
+    Data.Type.Boolean
+    Data.Type.Ord
+    Data.Type.Sign
+    Data.Type.Binary
+    Data.Type.Binary.Internals
+    Data.Type.Binary.TH
+    Data.Type.Hex
+    Data.Type.Hex.Stage1
+    Data.Type.Hex.Stage2
     Data.Type.Hex.Stage3
+    Data.Type.Maybe
+
   other-extensions: 
     MultiParamTypeClasses,
     FunctionalDependencies,
