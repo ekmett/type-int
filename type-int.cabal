@@ -32,7 +32,7 @@ Library
     Data.Type.Hex.Stage3
     Data.Type.Maybe
 
-  other-extensions: 
+  other-extensions:
     MultiParamTypeClasses,
     FunctionalDependencies,
     TemplateHaskell,
@@ -42,7 +42,7 @@ Library
     FlexibleContexts,
     FlexibleInstances,
     ScopedTypeVariables
-  build-depends: 
+  build-depends:
     base >= 4 && < 5,
     template-haskell >= 2.5 && < 3
   ghc-options: -O2 -funbox-strict-fields
