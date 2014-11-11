@@ -156,8 +156,8 @@ instance (Show (O t)) => Show (I (O t)) where show n = "I (" ++ show (undefined:
 -}
 
 -- | TNot preserves normalization trivially
-instance (TNot a b) => TNot (O a) (I b)
-instance (TNot a b) => TNot (I a) (O b)
+instance TNot a b => TNot (O a) (I b)
+instance TNot a b => TNot (I a) (O b)
 
 -- | TNeg obtains the 2s complement of a number and is reversible
 class TNeg a b | a -> b, b -> a
@@ -193,12 +193,12 @@ tIsZero :: TIsZero n b => n -> b; tIsZero = undefined
 -- | Returns true if the lsb of the number is true
 class TEven a b | a -> b
 instance LSB a b c => TEven a b
-tEven :: (TEven a b) => a -> b; tEven = undefined
+tEven :: TEven a b => a -> b; tEven = undefined
 
 -- | Returns true if the lsb of the number if false
 class TOdd a b | a -> b
 instance (LSB a b c, TNot b b') => TOdd a b'
-tOdd :: (TOdd a b) => a -> b; tOdd = undefined
+tOdd :: TOdd a b => a -> b; tOdd = undefined
 
 -- | A symmetrical full adder, that does not yield normal form answers.
 class TAddC' a b c d | a b c -> d
@@ -244,8 +244,8 @@ instance TNF' (O F) F F
 instance TNF' (I T) T F
 instance TNF' (I F) (I F) T
 instance TNF' (O T) (O T) T
-instance (TNF' (O a) c b) => TNF' (I (O a)) (I c) T
-instance (TNF' (I a) c b) => TNF' (O (I a)) (O c) T
+instance TNF' (O a) c b => TNF' (I (O a)) (I c) T
+instance TNF' (I a) c b => TNF' (O (I a)) (O c) T
 instance (TNF' (I a) c b, TIf b (I c) T d) => TNF' (I (I a)) d b
 instance (TNF' (O a) c b, TIf b (O c) F d) => TNF' (O (O a)) d b
 
@@ -273,7 +273,7 @@ instance (TBool d, TNeg b b', TAdd' a b' c, TIsNegative c d) => TLt a b d
 -- | Non-reversible addition. Kept for efficiency purposes.
 class TAdd' a b c | a b -> c
 instance (TAddC' a b F d, TNF d d') => TAdd' a b d'
-tAdd' :: (TAdd' a b c ) => a -> b -> c; tAdd' = undefined
+tAdd' :: TAdd' a b c => a -> b -> c; tAdd' = undefined
 
 -- | Non-reversible subtraction. Kept for efficiency purposes.
 class TSub' a b c | a b -> c
@@ -283,14 +283,14 @@ tSub' :: TSub' a b c => a -> b -> c; tSub' = undefined
 -- | Reversible adder with extra fundeps.
 class TAdd a b c | a b -> c, a c -> b, b c -> a
 instance (TAdd' a b c, TNeg b b', TAdd' c b' a, TNeg a a', TAdd' c a' b) => TAdd a b c
-tAdd :: (TAdd a b c) => a -> b -> c; tAdd = undefined
-tSub :: (TAdd a b c) => c -> a -> b; tSub = undefined
+tAdd :: TAdd a b c => a -> b -> c; tAdd = undefined
+tSub :: TAdd a b c => c -> a -> b; tSub = undefined
 
 -- | Multiplication: a * b = c
 class TMul a b c | a b -> c
 instance TMul a F F
 instance TNeg a b => TMul a T b
-instance (TMul (O a) b c) => TMul a (O b) c
+instance TMul (O a) b c => TMul a (O b) c
 instance (TMul (O a) b c, TAdd' a c d) => TMul a (I b) d
 tMul :: TMul a b c => a -> b -> c; tMul = undefined
 
